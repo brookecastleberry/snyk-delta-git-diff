@@ -1,0 +1,13 @@
+/Users/brookecastleberry/Desktop/snyk-delta-git-diff/tests/test_project_1/bin/Debug/net8.0/test_project1.deps.json
+/Users/brookecastleberry/Desktop/snyk-delta-git-diff/tests/test_project_1/bin/Debug/net8.0/test_project1.dll
+/Users/brookecastleberry/Desktop/snyk-delta-git-diff/tests/test_project_1/bin/Debug/net8.0/test_project1.pdb
+/Users/brookecastleberry/Desktop/snyk-delta-git-diff/tests/test_project_1/obj/Debug/net8.0/test_project1.csproj.AssemblyReference.cache
+/Users/brookecastleberry/Desktop/snyk-delta-git-diff/tests/test_project_1/obj/Debug/net8.0/test_project1.GeneratedMSBuildEditorConfig.editorconfig
+/Users/brookecastleberry/Desktop/snyk-delta-git-diff/tests/test_project_1/obj/Debug/net8.0/test_project1.AssemblyInfoInputs.cache
+/Users/brookecastleberry/Desktop/snyk-delta-git-diff/tests/test_project_1/obj/Debug/net8.0/test_project1.AssemblyInfo.cs
+/Users/brookecastleberry/Desktop/snyk-delta-git-diff/tests/test_project_1/obj/Debug/net8.0/test_project1.csproj.CoreCompileInputs.cache
+/Users/brookecastleberry/Desktop/snyk-delta-git-diff/tests/test_project_1/obj/Debug/net8.0/test_project1.sourcelink.json
+/Users/brookecastleberry/Desktop/snyk-delta-git-diff/tests/test_project_1/obj/Debug/net8.0/test_project1.dll
+/Users/brookecastleberry/Desktop/snyk-delta-git-diff/tests/test_project_1/obj/Debug/net8.0/refint/test_project1.dll
+/Users/brookecastleberry/Desktop/snyk-delta-git-diff/tests/test_project_1/obj/Debug/net8.0/test_project1.pdb
+/Users/brookecastleberry/Desktop/snyk-delta-git-diff/tests/test_project_1/obj/Debug/net8.0/ref/test_project1.dll
