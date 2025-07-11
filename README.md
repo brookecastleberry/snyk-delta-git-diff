@@ -8,9 +8,7 @@ This project is designed to **increase Snyk Delta scan speed by leveraging `git 
 
 ## Running snyk-delta
 
-`snyk-delta` can be run in two main ways, depending on your workflow and what you want to compare:
-
-### 1. Inline Mode (Pipe from `snyk test`)
+### Inline Mode (Pipe from `snyk test`)
 
 - **How it works:**  
   Run `snyk test` (with any flags you need), pipe the JSON results into `snyk-delta`.  
@@ -27,24 +25,16 @@ This project is designed to **increase Snyk Delta scan speed by leveraging `git 
 
 ---
 
-### 2. Standalone Mode (Compare Two Monitored Snapshots)
-
-- **How it works:**  
-  Run `snyk-delta` directly, specifying two Snyk projects (typically across branches, forks, or orgs) by their org/project UUIDs.  
-  This compares the monitored snapshots for each and shows the difference in vulnerabilities.
-
-- **Example:**  
-  ```sh
-  snyk-delta --baselineOrg uuid-xxx-xxx-xxx --baselineProject uuid-xxx-xxx-xxx --currentOrg uuid-yyy-yyy-yyy --currentProject uuid-yyy-yyy-yyy
-  ```
-
----
-
 ## Relevant Files for git diff
 
 - Relevant files for `git diff` should be determined based on your project's language and the files detectable by Snyk.  
 - Update the list of relevant files/extensions in your workflow to match the manifest or lock files appropriate for the language(s) you are scanning.  
 - For a full list of supported files per language, refer to [Snyk CLI detect.ts](https://github.com/snyk/cli/blob/main/src/lib/detect.ts).
+- See the [GitHub Actions section](#running-github-actions) for an example of how to filter for specific file types:
+  ```sh
+  echo "Filtering for .csproj, .sln, .lock, .json, .config"
+  grep -E '\.(csproj|sln|lock|json|config)$' changed_files.txt > relevant_changed_files.txt || true
+  ```
 
 ---
 
@@ -54,21 +44,16 @@ This project is designed to **increase Snyk Delta scan speed by leveraging `git 
 
 ---
 
-## Delta Standalone Mode
+## Adapting for Other Snyk Commands
 
-- **Limitations:**
-    - If a file name or path has been renamed between running `snyk monitor` and running `snyk-delta` for a specific org and project, results may be unreliable or incomplete because it might fail to identify the correct project ID.
-    - If you have duplicate projects in Snyk, you'll need to specify the project origin.
-      - To view your projects and origins for a particular organization, use the Snyk API:
+While this example focuses on `snyk-delta`, the git diff approach can be adapted to run additional Snyk commands on only the changed files:
 
-        ```sh
-        curl --request GET \
-          --url "https://api.snyk.io/rest/orgs/{orgId}/projects?version=2024-10-15" \
-          --header "Content-Type: application/vnd.api+json" \
-          --header "Authorization: token YOUR_SNYK_API_TOKEN"
-        ```
+- **`snyk test`** - Run security tests only on changed manifest/lock files
+- **`snyk monitor`** - Monitor only changed projects to update snapshots
+- **`snyk code test`** - Run static code analysis only on changed source files
+- **`snyk iac test`** - Test Infrastructure as Code files that have changed
 
-      - This helps validate the correct project ID and avoid duplicate project confusion.
+The key is to adjust the file filtering logic to match the specific file types relevant to each Snyk command and your project structure.
 
 ---
 
@@ -101,8 +86,3 @@ This will trigger your workflow so your changes are processed immediately.
 
 ---
 
-## Contributions
-
-Contributions are welcome! Please open an issue or PR for suggestions, fixes, or improvements.
-
----
