@@ -29,12 +29,8 @@ This project is designed to **increase Snyk Delta scan speed by leveraging `git 
 
 - Relevant files for `git diff` should be determined based on your project's language and the files detectable by Snyk.  
 - Update the list of relevant files/extensions in your workflow to match the manifest or lock files appropriate for the language(s) you are scanning.  
-- For a full list of supported files per language, refer to [Snyk CLI detect.ts](https://github.com/snyk/cli/blob/main/src/lib/detect.ts).
-- See the [GitHub Actions section](#running-github-actions) for an example of how to filter for specific file types:
-  ```sh
-  echo "Filtering for .csproj, .sln, .lock, .json, .config"
-  grep -E '\.(csproj|sln|lock|json|config)$' changed_files.txt > relevant_changed_files.txt || true
-  ```
+- For a list of supported files per language, refer to [Snyk CLI detect.ts](https://github.com/snyk/cli/blob/main/src/lib/detect.ts).
+- See the [GitHub Actions workflow](.github/workflows/snyk_delta_with_test.yaml#L75-L76) for an example of how to filter for specific file types.
 
 ---
 
