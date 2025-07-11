@@ -36,7 +36,7 @@ This project is designed to **increase Snyk Delta scan speed by leveraging `git 
 
 ## Example use case for snyk-delta
 
-- **Use case:** You have a `snyk monitor` running on your main branch and want to identify what vulnerabilities are new/removed in a PR or feature branch.
+- **Use case:** You have a `snyk monitor` running on your main branch and want to identify what vulnerabilities are new/removed in a PR from a feature branch.
 
 ---
 
@@ -78,7 +78,6 @@ This will trigger your workflow so your changes are processed immediately.
 
 - [Snyk CLI Manifest Detection](https://github.com/snyk/cli/blob/main/src/lib/detect.ts)
 - [snyk-delta Documentation & Flags](https://github.com/snyk-tech-services/snyk-delta/blob/develop/README.md)
-- [Snyk REST API Docs](https://docs.snyk.io/api/v1/overview/introduction)
 
 ---
 
