@@ -106,3 +106,26 @@ jobs:
             echo "File does not exist: $file"
           fi
         done < relevant_changed_files.txt
+
+
+    - name: Run Snyk Test and Snyk Delta on Changed Files - TEST
+      run: |
+        if [ ! -s relevant_changed_files.txt ]; then
+          echo "No relevant files to scan. Skipping Snyk test and delta."
+          exit 0
+        fi
+
+        set -e
+        while IFS= read -r file; do
+          if [[ -f "$file" ]]; then
+            echo "Processing file: $file"
+            DIR=$(dirname "$file")
+            (
+              cd "$DIR" 
+              pwd
+              snyk test --dotnet-restore-resolution --json | snyk-delta --baselineOrg="$SNYK_OTHER_ORG_ID" || true
+            )
+          else
+            echo "File does not exist: $file"
+          fi
+        done < relevant_changed_files.txt
