@@ -1,5 +1,7 @@
 # snyk-delta-git-diff
 
+![Snyk OSS Example](https://raw.githubusercontent.com/snyk-labs/oss-images/main/oss-example.jpg)
+
 ## Purpose
 
 This project is designed to **increase Snyk Delta scan speed by leveraging `git diff`** to focus Snyk scans on files changed in between commits. By doing so, you speed up evaluation during development, PR reviews, or CI/CD workflows.

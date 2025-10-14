@@ -1,0 +1,131 @@
+#Snyk test piped to delta 
+name: Snyk Test & Delta Scan with Git Diff
+
+on: workflow_dispatch
+
+jobs:
+  snyk-sca:
+    name: Snyk SCA Scan
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v3
+      with:
+        fetch-depth: 0  
+        ref: main   
+
+    - uses: actions/setup-node@v4
+      with:
+        node-version: '20'
+
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v3
+      with:
+        dotnet-version: '8.0.x'
+
+    - name: Restore dependencies (all projects)
+      run: |
+        for csproj in $(find . -name "*.csproj"); do
+          echo "Restoring $csproj"
+          dotnet restore "$csproj"
+        done
+
+    - name: Build (all projects)
+      run: |
+        for csproj in $(find . -name "*.csproj"); do
+          echo "Building $csproj"
+          dotnet build "$csproj" --no-restore
+        done
+
+    - name: Publish (all projects)
+      run: |
+        for csproj in $(find . -name "*.csproj"); do
+          echo "Publishing $csproj"
+          dotnet publish "$csproj" --no-restore
+        done
+
+    - name: Install Snyk CLI
+      run: |
+        curl -Lo ./snyk https://static.snyk.io/cli/latest/snyk-linux
+        chmod +x ./snyk
+        mv ./snyk /usr/local/bin/
+
+    - name: SNYK auth
+      run: |
+        snyk auth ${{secrets.SNYK_API_TOKEN}}
+
+    - name: Install snyk-delta
+      run: |
+        curl -Lo snyk-delta https://github.com/snyk-tech-services/snyk-delta/releases/download/v1.12.7/snyk-delta-linux
+        chmod +x snyk-delta
+        sudo mv snyk-delta /usr/local/bin/
+
+    - name: Install jq
+      run: sudo apt-get update && sudo apt-get install -y jq
+
+    - name: Get Changed Files
+      run: |
+        echo "Running: git diff --name-only HEAD^1 HEAD"
+        git diff --name-only HEAD^1 HEAD > changed_files.txt
+    
+        echo "changed_files.txt:"
+        cat changed_files.txt
+    
+        echo "Filtering for .csproj, .sln, .lock, .json, .config"
+        grep -E '\.(csproj|sln|lock|json|config)$' changed_files.txt > relevant_changed_files.txt || true
+    
+        if [ ! -s relevant_changed_files.txt ]; then
+          echo "No relevant files changed."
+          exit 0
+        fi
+    
+        echo "Relevant changed files:"
+        cat relevant_changed_files.txt
+
+        
+
+    - name: Run Snyk Test and Snyk Delta on Changed Files
+      run: |
+        if [ ! -s relevant_changed_files.txt ]; then
+          echo "No relevant files to scan. Skipping Snyk test and delta."
+          exit 0
+        fi
+
+        set -e
+        while IFS= read -r file; do
+          if [[ -f "$file" ]]; then
+            echo "Processing file: $file"
+            DIR=$(dirname "$file")
+            (
+              cd "$DIR" 
+              pwd
+              snyk test --dotnet-restore-resolution --json | snyk-delta --baselineOrg="$SNYK_OTHER_ORG_ID" || true
+            )
+          else
+            echo "File does not exist: $file"
+          fi
+        done < relevant_changed_files.txt
+
+
+    - name: Run Snyk Test and Snyk Delta on Changed Files - TEST
+      run: |
+        if [ ! -s relevant_changed_files.txt ]; then
+          echo "No relevant files to scan. Skipping Snyk test and delta."
+          exit 0
+        fi
+
+        set -e
+        while IFS= read -r file; do
+          if [[ -f "$file" ]]; then
+            echo "Processing file: $file"
+            DIR=$(dirname "$file")
+            (
+              cd "$DIR" 
+              pwd
+              snyk test --dotnet-restore-resolution --json | snyk-delta --baselineOrg="$SNYK_OTHER_ORG_ID" || true
+            )
+          else
+            echo "File does not exist: $file"
+          fi
+        done < relevant_changed_files.txt
