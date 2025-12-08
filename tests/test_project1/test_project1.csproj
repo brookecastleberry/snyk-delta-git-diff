@@ -5,9 +5,7 @@
     <ManagePackageVersionsCentrally>true</ManagePackageVersionsCentrally>
   </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="Newtonsoft.Json" />
-    <PackageReference Include="System.Net.Http" Version="4.3.0" />
-    <PackageReference Include="log4net" Version="2.0.8" />      
+    <PackageReference Include="Newtonsoft.Json" />      
   </ItemGroup>        
 </Project>
 
